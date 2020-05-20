@@ -15,24 +15,25 @@ services:
       - "9001:9000"
     volumes:
        - ./:/var/www
-       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+       - ./path/to/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
 
   # Node Service
   client:
-    image: node:latest
+    image: node-workspace:latest
     container_name: client
     restart: unless-stopped
     tty: true
-    working_dir: /var/www
+    working_dir: /var/www/client
     command: "npm --prefix /var/www/client run start"
     ports:
       - "3000:3000"
     volumes:
-      - ./:/var/www
+      - ./client:/var/www/client
+      - /var/www/client/node_modules
     networks:
-      - app-network
+      - app-network 
 
   # Nginx Service
   server:
